@@ -1,4 +1,5 @@
 # Table of Contents
+- [Thanks](#thanks)
 - [Introduction](#introduction)
     - [Version](#version)
     - [Changelog](Changelog.md)
@@ -8,26 +9,28 @@
   - [Database](#database)
   - [Available Configuration Parameters](#available-configuration-parameters)
 
+# Thanks
+
+Special thanks to https://github.com/eternnoir/activiti
+I used his project a template for this one.
+
 # Introduction
 
 Dockerfile to build an [Activiti 6 BPM](#http://www.activiti.org/) container image.
 
-## Version
-
-Version: 6.0.0
 
 # Installation
 
-Pull the latest version of the image from the docker index. This is the recommended method of installation as it is easier to update image in the future. These builds are performed by the **Docker Trusted Build** service.
+Pull the latest version of the image from the docker hub. 
 
 ```bash
 docker pull antrad1978/activiti6:latest
 ```
 
-Since version `latest`, the image builds are being tagged. You can now pull a particular version of activiti by specifying the version number. For example,
+Every image is tagged, but please use `latest`. For example,
 
 ```bash
-docker pull antrad1978/activiti6:1
+docker pull antrad1978/activiti6:latest
 ```
 
 Alternately you can build the image yourself.
@@ -35,7 +38,7 @@ Alternately you can build the image yourself.
 ```bash
 git clone https://github.com/antrad1978/activiti6.git
 cd activiti
-docker build --tag="$USER/activiti" .
+docker build --tag="$USER/activiti6" .
 ```
 
 # Quickstart
@@ -43,11 +46,7 @@ docker build --tag="$USER/activiti" .
 Run the activiti image
 
 ```bash
-docker run --name='activiti6' -it --rm \
--p 8080:8080 \
--v /var/run/docker.sock:/run/docker.sock \
--v $(which docker):/bin/docker \
-antrad1978/activiti6:latest
+docker run -e DB_TYPE=mysql -e DB_PORT=3306 -e DB_HOST=172.17.0.2 -e DB_NAME=activiti -e DB_USER=root -e DB_PASS=root --name activiti6 -p 8080:8080  -d activiti6
 ```
 
 Point your browser to `http://localhost:8080/activiti-app` and login using the default username and password:
@@ -63,11 +62,9 @@ Point your browser to `http://localhost:8080/activiti-admin` for admin app and l
 You should now have the Activiti application up and ready for testing. If you want to use this image in production the please read on.
 
 
-# Configuration
-
 ## Database
 
-Activiti uses a database backend to store its data. You can configure this image to use MySQL.
+This Activiti 6 image uses a MySql database backend to store its data.
 
 ### MySQL
 
@@ -79,7 +76,7 @@ The image can be configured to use an external MySQL database instead of startin
 `https://severalnines.com/blog/mysql-docker-containers-understanding-basics`
 
 
-Before you start the Activiti image create user and database for activiti.
+Before you start the Activiti image create user and database for activiti. The complete data structure will be created by Hibernate.
 
 ```sql
 CREATE USER 'activiti'@'%.%.%.%' IDENTIFIED BY 'password';
@@ -93,7 +90,7 @@ We are now ready to start the Activiti application.
 
 ```bash
 docker run --name=activiti -d \
-  -e 'DB_HOST=192.0.2.1’ -e 'DB_NAME=activiti_production' -e 'DB_USER=activiti’ -e 'DB_PASS=password' \
+  -e 'DB_HOST=192.0.2.1’ -e 'DB_NAME=activiti' -e 'DB_USER=activiti’ -e 'DB_PASS=password' \
 antrad1978/activiti6:latest
 ```
 
@@ -103,44 +100,7 @@ You can link this image with a mysql container for the database requirements. Th
 
 If a mysql container is linked, only the `DB_TYPE`, `DB_HOST` and `DB_PORT` settings are automatically retrieved using the linkage. You may still need to set other database connection parameters such as the `DB_NAME`, `DB_USER`, `DB_PASS` and so on.
 
-To illustrate linking with a mysql container, we will use the [sameersbn/mysql](https://github.com/sameersbn/docker-mysql) image. When using docker-mysql in production you should mount a volume for the mysql data store. Please refer the [README](https://github.com/sameersbn/docker-mysql/blob/master/README.md) of docker-mysql for details.
-
-First, lets pull the mysql image from the docker index.
-
-```bash
-docker pull sameersbn/mysql:latest
-```
-
-For data persistence lets create a store for the mysql and start the container.
-
-SELinux users are also required to change the security context of the mount point so that it plays nicely with selinux.
-
-```bash
-mkdir -p /opt/mysql/data
-sudo chcon -Rt svirt_sandbox_file_t /opt/mysql/data
-```
-
-The run command looks like this.
-
-```bash
-docker run --name=mysql -d \
-  -e 'DB_NAME=activiti' -e 'DB_USER=activiti' -e 'DB_PASS=password' \
-	-v /opt/mysql/data:/var/lib/mysql \
-	sameersbn/mysql:latest
-```
-
-The above command will create a database named `activiti_production` and also create a user named `activiti` with the password `activiti` with full/remote access to the `activiti_production` database.
-
-We are now ready to start the Activiti application.
-
-```bash
-docker run --name=activiti6 -d --link mysql:mysql \
-  antrad1978/activiti6:latest
-```
-
-The image will automatically fetch the `DB_NAME`, `DB_USER` and `DB_PASS` variables from the mysql container using the magic of docker links and works with the following images:
-
- - [sameersbn/mysql](https://registry.hub.docker.com/u/sameersbn/mysql/)
+By the way this is not the best way to use Docker, better use networking.
 
 ### Available Configuration Parameters
 
@@ -180,12 +140,9 @@ For more information refer https://github.com/jpetazzo/nsenter
 
 Another tool named `nsinit` can also be used for the same purpose. Please refer https://jpetazzo.github.io/2014/03/23/lxc-attach-nsinit-nsenter-docker-0-9/ for more information.
 
-# Upgrading
-
-TODO
-
 # References
 
+* https://github.com/eternnoir/activiti
 * http://activiti.org/
 * http://github.com/Activiti/Activiti
 * http://tomcat.apache.org/

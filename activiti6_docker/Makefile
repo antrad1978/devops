@@ -14,7 +14,7 @@ test:
 	${USER}/activiti6
 
 run:
-	@docker run --name='activiti' \
+	@docker run --name='activiti6' \
         -d \
 	-p 8080:8080 \
 	-v /var/run/docker.sock:/var/run/docker.sock \
@@ -22,7 +22,7 @@ run:
 	${USER}/activiti6
 
 prod:
-	@docker run --name='activiti' \
+	@docker run --name='activiti6' \
         -d \
 	-p 8080:8080 \
         --link activiti-mysql:mysql \

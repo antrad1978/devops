@@ -1,4 +1,3 @@
-docker run -e DB_TYPE=mysql -e DB_PORT=3306 -e DB_HOST=127.0.0.1 -e DB_NAME=activiti -e DB_USER=root -e DB_PASS=root --name activiti6 -p 8080:8080  -d activiti6
-
+Sample:
 
 docker run -e DB_TYPE=mysql -e DB_PORT=3306 -e DB_HOST=172.17.0.2 -e DB_NAME=activiti -e DB_USER=root -e DB_PASS=root --name activiti6 -p 8080:8080  -d activiti6

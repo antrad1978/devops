@@ -44,7 +44,6 @@ ADD assets /assets
 COPY ./assets/config/tomcat-users.xml /assets/config/tomcat/tomcat-users.xml
 COPY ./assets/init /assets/init
 COPY ./assets/config/activiti-admin.properties /opt/tomcat/webapps/activiti-admin/WEB-INF/classes/META-INF/activiti-admin/activiti-admin.properties
-RUN ls /assets/config/tomcat/
 RUN cp /assets/config/tomcat/tomcat-users.xml /opt/apache-tomcat-${TOMCAT_VERSION}/conf/
 
 CMD ["/assets/init"]
