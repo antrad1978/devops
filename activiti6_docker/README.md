@@ -12,7 +12,7 @@
 # Thanks
 
 Special thanks to https://github.com/eternnoir/activiti
-I used his project a template for this one.
+I used his project as template for this one.
 
 # Introduction
 
@@ -36,8 +36,8 @@ docker pull antrad1978/activiti6:latest
 Alternately you can build the image yourself.
 
 ```bash
-git clone https://github.com/antrad1978/activiti6.git
-cd activiti
+git clone https://github.com/antrad1978/devops.git
+cd activiti6_docker
 docker build --tag="$USER/activiti6" .
 ```
 

@@ -1,18 +1,7 @@
 # Table of Contents
-- [Thanks](#thanks)
 - [Introduction](#introduction)
-    - [Version](#version)
-    - [Changelog](Changelog.md)
 - [Installation](#installation)
 - [Quickstart](#quickstart)
-- [Configuration](#configuration)
-  - [Database](#database)
-  - [Available Configuration Parameters](#available-configuration-parameters)
-
-# Thanks
-
-Special thanks to https://github.com/eternnoir/activiti
-I used his project a template for this one.
 
 # Introduction
 
@@ -30,27 +19,25 @@ docker pull antrad1978/mysql:latest
 Alternately you can build the image yourself.
 
 ```bash
-git clone https://github.com/antrad1978/activiti6.git
-cd activiti
-docker build --tag="$USER/activiti6" .
+git clone https://github.com/antrad1978/devops.git
+cd mysql
+docker build --tag="$USER/mysql" .
 ```
 
 # Quickstart
 
+Pull image:
+```bash
+docker pull antrad1978/mysql_activiti6
+```
+
 Run the activiti image
 
 ```bash
-docker run -e DB_TYPE=mysql -e DB_PORT=3306 -e DB_HOST=172.17.0.2 -e DB_NAME=activiti -e DB_USER=root -e DB_PASS=root --name activiti6 -p 8080:8080  -d activiti6
+docker run --name mysql_activiti6 -e MYSQL_ROOT_PASSWORD=root -d mysql_activiti6
 ```
-
 
 
 # References
 
-* https://github.com/eternnoir/activiti
-* http://activiti.org/
-* http://github.com/Activiti/Activiti
-* http://tomcat.apache.org/
-* http://dev.mysql.com/downloads/connector/j/5.1.html
-* https://github.com/jpetazzo/nsenter
-* https://jpetazzo.github.io/2014/03/23/lxc-attach-nsinit-nsenter-docker-0-9/
+* https://hub.docker.com/_/mysql/
