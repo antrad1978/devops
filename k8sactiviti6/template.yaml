@@ -1,0 +1,79 @@
+kind: List
+apiVersion: v1
+metadata: {}
+
+items:
+
+- apiVersion: v1
+  kind: Template
+  metadata:
+    name: activiti6
+    annotations:
+      description: 2-pod Activiti 6 with MySql
+      tags: activiti6
+  parameters:
+  - name: NAME
+    description: Name prefix for each object created
+    required: true
+    value: activiti6
+  - name: IMAGE
+    description: Image with Activiti 6
+    required: true
+    value: antrad1978/k8sactiviti6:latest
+  objects:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: ${NAME}
+    spec:
+      replicas: 1
+      selector:
+        deploymentconfig: ${NAME}
+      template:
+        metadata:
+          labels:
+            deploymentconfig: ${NAME}
+        spec:
+          hostname: ${NAME}
+          containers:
+          - name: activiti6
+            image: ${IMAGE}
+            ports:
+            - containerPort: 8080
+          - name: mysqlactiviti6
+            image: antrad1978/mysql_activiti6:1
+            env:
+              # Use secret in real usage
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+            volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+            ports:
+            - containerPort: "3306"
+          volumes:
+          - name: mysql-persistent-storage
+            emptyDir: {}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: activiti6
+    spec:
+      ports:
+      - name: activiti6
+        port: "8080"
+      selector:
+        deploymentconfig: activiti6
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: mysqlactiviti6
+      labels:
+        app: mysqlactiviti6
+    spec:
+      ports:
+      - name: mysqlactiviti6
+        port: "3306"
+        protocol: TCP
+      selector:
+        deploymentconfig: activiti6
