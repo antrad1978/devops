@@ -33,7 +33,7 @@ RUN wget https://github.com/Activiti/Activiti/releases/download/activiti-${ACTIV
 	rm -f /opt/tomcat/webapps/activiti-app/classes/activiti-app.properties && \
 	rm -f /opt/tomcat/webapps/activiti-admin/WEB-INF/classes/META-INF/activiti-admin/activiti-admin.properties
 
-# Add mysql connector to applicd...cation
+# Add mysql connector to application
 ADD mysql-connector-java-5.1.40.jar /tmp/mysql-connector-java.jar
 RUN	cp /tmp/mysql-connector-java.jar /opt/tomcat/webapps/activiti-app/WEB-INF/lib/ && \
 	cp /tmp/mysql-connector-java.jar /opt/tomcat/webapps/activiti-admin/WEB-INF/lib/ && \
@@ -42,9 +42,9 @@ RUN	cp /tmp/mysql-connector-java.jar /opt/tomcat/webapps/activiti-app/WEB-INF/li
 # Add roles
 ADD assets /assets
 COPY ./assets/config/tomcat-users.xml /assets/config/tomcat/tomcat-users.xml
-COPY ./assets/init /assets/init
+COPY ./assets/init /bin/init
 COPY ./assets/config/activiti-admin.properties /opt/tomcat/webapps/activiti-admin/WEB-INF/classes/META-INF/activiti-admin/activiti-admin.properties
-RUN cp /assets/config/tomcat/tomcat-users.xml /opt/apache-tomcat-${TOMCAT_VERSION}/conf/
+RUN cp -f /assets/config/tomcat/tomcat-users.xml /opt/apache-tomcat-${TOMCAT_VERSION}/conf/
 
-CMD ["/assets/init"]
+CMD ["init"]
 
