@@ -14,7 +14,7 @@ ADD ./apache-tomcat-9.0.12/webapps/activiti-app.war /usr/local/tomcat/webapps/
 ADD ./apache-tomcat-9.0.12/webapps/activiti-rest.war /usr/local/tomcat/webapps/
 
 COPY ./assets/config/tomcat-users.xml /usr/local/tomcat/conf/
-
+#Set correct permissions for production environment
 RUN chmod 777 /usr/local/tomcat/webapps/
 
 EXPOSE 8080
