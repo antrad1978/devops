@@ -6,8 +6,7 @@
 
 # Introduction
 
-Dockerfile to build an [Activiti 6 BPM](#http://www.activiti.org/) container image configuration-ready.
-
+Dockerfile to build an [Activiti 6 BPM](#http://www.activiti.org/) container image configuration-ready. YAML file contains a full template for Activiti 6 that eventually you could customize for your needs.
 
 # Installation
 
@@ -19,7 +18,7 @@ oc create -f template.yaml
 
 # Quickstart
 
-You can create your custom docker image changing configuration files attached and creating your custom wars.
+It is possible to create your custom docker image simply changing configuration files attached and adding your custom wars.
 
 # References
 
